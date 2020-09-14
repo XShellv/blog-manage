@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form, Input, Radio, Tag, Tooltip, Button } from "antd";
+import { useHistory } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons";
+import { service } from "../../service";
 import Markdown from "../../components/markdown";
-
 
 const layout = {
   labelCol: { span: 4 },
@@ -14,20 +15,31 @@ const tailLayout = {
 
 export default () => {
   const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
+  const history = useHistory();
 
-  const onFinish = (values) => {
-    debugger
-  }
+  const onFinish = async (values) => {
+    setLoading(true);
+    const ret = await service.fetchPost(values);
+    if (ret) {
+      setLoading(false);
+      history.push("/result");
+    }
+  };
   const checkTags = (rule, value) => {
     if (value.length === 0) {
-      return Promise.reject('至少包含一个标签！');
+      return Promise.reject("至少包含一个标签！");
+    } else {
+      return Promise.resolve();
     }
-  }
+  };
   const checkContent = (rule, value) => {
     if (value.trim().length === 0) {
       return Promise.reject("文章内容不能为空！");
+    } else {
+      return Promise.resolve();
     }
-  }
+  };
   return (
     <div>
       <Form
@@ -41,24 +53,42 @@ export default () => {
           status: "draft",
         }}
       >
-        <Form.Item name="title" label="标题" rules={[{
-          required: true,
-          message: "标题不可为空！"
-        }]}>
+        <Form.Item
+          name="title"
+          label="标题"
+          rules={[
+            {
+              required: true,
+              message: "标题不可为空！",
+            },
+          ]}
+        >
           <Input />
         </Form.Item>
 
-        <Form.Item name="abstract" label="摘要" rules={[{
-          required: true,
-          message: "摘要不可为空！"
-        }]}>
+        <Form.Item
+          name="abstract"
+          label="摘要"
+          rules={[
+            {
+              required: true,
+              message: "摘要不可为空！",
+            },
+          ]}
+        >
           <Input.TextArea />
         </Form.Item>
 
-        <Form.Item name="post" label="图片" rules={[{
-          required: true,
-          message: "图片链接不可为空"
-        }]}>
+        <Form.Item
+          name="post"
+          label="图片"
+          rules={[
+            {
+              required: true,
+              message: "图片链接不可为空",
+            },
+          ]}
+        >
           <Input />
         </Form.Item>
 
@@ -69,11 +99,19 @@ export default () => {
           </Radio.Group>
         </Form.Item>
 
-        <Form.Item name="tags" label="标签组" rules={[{ validator: checkTags, required: true }]}>
+        <Form.Item
+          name="tags"
+          label="标签组"
+          rules={[{ validator: checkTags, required: true }]}
+        >
           <EditableTagGroup />
         </Form.Item>
 
-        <Form.Item name="content" label="内容" rules={[{ validator: checkContent, required: true }]}>
+        <Form.Item
+          name="content"
+          label="内容"
+          rules={[{ validator: checkContent, required: true }]}
+        >
           <Markdown />
         </Form.Item>
 
@@ -85,7 +123,7 @@ export default () => {
         </Form.Item>
 
         <Form.Item {...tailLayout}>
-          <Button type="primary" htmlType="submit" >
+          <Button type="primary" htmlType="submit" loading={loading}>
             提交
           </Button>
         </Form.Item>
@@ -221,8 +259,8 @@ class EditableTagGroup extends React.Component {
               {tagElem}
             </Tooltip>
           ) : (
-              tagElem
-            );
+            tagElem
+          );
         })}
         {inputVisible && (
           <Input
