@@ -9,7 +9,7 @@ export default ({ children }) => {
     <Layout className="layout">
       <Header>
         <div className="logo" />
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["2"]}>
+        <Menu theme="light" mode="horizontal" defaultSelectedKeys={["2"]}>
           <Menu.Item key="1">nav 1</Menu.Item>
           <Menu.Item key="2">nav 2</Menu.Item>
           <Menu.Item key="3">nav 3</Menu.Item>
@@ -26,7 +26,7 @@ export default ({ children }) => {
         </Card>
       </Content>
       <Footer style={{ textAlign: "center" }}>
-        <span>❤️ Copyright © 2020 developed by Xshellv</span>
+        Ant Design ©2018 Created by Ant UED
       </Footer>
     </Layout>
   );

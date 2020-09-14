@@ -69,11 +69,11 @@ export default () => {
           </Radio.Group>
         </Form.Item>
 
-        <Form.Item name="tags" label="标签组" rules={[{ validator: checkTags, required: true }]}>
+        <Form.Item name="tags" label="标签组" rules={[{ validator: checkTags }]}>
           <EditableTagGroup />
         </Form.Item>
 
-        <Form.Item name="content" label="内容" rules={[{ validator: checkContent, required: true }]}>
+        <Form.Item name="content" label="内容" rules={[{ validator: checkContent }]}>
           <Markdown />
         </Form.Item>
 

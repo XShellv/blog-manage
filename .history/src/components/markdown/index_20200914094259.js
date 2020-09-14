@@ -21,6 +21,7 @@ class Markdown extends React.Component {
         enable: false,
       },
       input: (value, previewElement) => {
+          debugger
         this.triggerChange(value);
       },
       after: () => {

@@ -26,7 +26,7 @@ export default ({ children }) => {
         </Card>
       </Content>
       <Footer style={{ textAlign: "center" }}>
-        <span>❤️ Copyright © 2020 developed by Xshellv</span>
+        Ant Design ©2018 Created by Ant UED
       </Footer>
     </Layout>
   );

@@ -11,7 +11,7 @@ function App() {
       <Layout>
         <Route path="/" exact component={Edit}></Route>
         <Route path="/about" component={About}></Route>
-        <Route path="/list" component={List}></Route>
+        <Route path="/post/list" component={List}></Route>
       </Layout>
     </Router>
   );

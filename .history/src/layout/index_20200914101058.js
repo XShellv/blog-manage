@@ -26,7 +26,7 @@ export default ({ children }) => {
         </Card>
       </Content>
       <Footer style={{ textAlign: "center" }}>
-        <span>❤️ Copyright © 2020 developed by Xshellv</span>
+      ❤️ Copyright © 2020 developed by Xshellv
       </Footer>
     </Layout>
   );

@@ -5,11 +5,11 @@ import Markdown from "../../components/markdown";
 
 
 const layout = {
-  labelCol: { span: 4 },
+  labelCol: { span: 8 },
   wrapperCol: { span: 16 },
 };
 const tailLayout = {
-  wrapperCol: { offset: 4, span: 16 },
+  wrapperCol: { offset: 8, span: 16 },
 };
 
 export default () => {
@@ -17,16 +17,6 @@ export default () => {
 
   const onFinish = (values) => {
     debugger
-  }
-  const checkTags = (rule, value) => {
-    if (value.length === 0) {
-      return Promise.reject('至少包含一个标签！');
-    }
-  }
-  const checkContent = (rule, value) => {
-    if (value.trim().length === 0) {
-      return Promise.reject("文章内容不能为空！");
-    }
   }
   return (
     <div>
@@ -43,22 +33,16 @@ export default () => {
       >
         <Form.Item name="title" label="标题" rules={[{
           required: true,
-          message: "标题不可为空！"
+          message: "请输入标题"
         }]}>
           <Input />
         </Form.Item>
 
-        <Form.Item name="abstract" label="摘要" rules={[{
-          required: true,
-          message: "摘要不可为空！"
-        }]}>
+        <Form.Item name="abstract" label="摘要">
           <Input.TextArea />
         </Form.Item>
 
-        <Form.Item name="post" label="图片" rules={[{
-          required: true,
-          message: "图片链接不可为空"
-        }]}>
+        <Form.Item name="post" label="配图">
           <Input />
         </Form.Item>
 
@@ -69,11 +53,11 @@ export default () => {
           </Radio.Group>
         </Form.Item>
 
-        <Form.Item name="tags" label="标签组" rules={[{ validator: checkTags, required: true }]}>
+        <Form.Item name="tags" label="标签组">
           <EditableTagGroup />
         </Form.Item>
 
-        <Form.Item name="content" label="内容" rules={[{ validator: checkContent, required: true }]}>
+        <Form.Item name="content" label="内容">
           <Markdown />
         </Form.Item>
 
@@ -84,8 +68,8 @@ export default () => {
           </Radio.Group>
         </Form.Item>
 
-        <Form.Item {...tailLayout}>
-          <Button type="primary" htmlType="submit" >
+        <Form.Item>
+          <Button type="primary" htmlType="submit" {...tailLayout}>
             提交
           </Button>
         </Form.Item>

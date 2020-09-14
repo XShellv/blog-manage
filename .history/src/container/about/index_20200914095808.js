@@ -18,16 +18,6 @@ export default () => {
   const onFinish = (values) => {
     debugger
   }
-  const checkTags = (rule, value) => {
-    if (value.length === 0) {
-      return Promise.reject('至少包含一个标签！');
-    }
-  }
-  const checkContent = (rule, value) => {
-    if (value.trim().length === 0) {
-      return Promise.reject("文章内容不能为空！");
-    }
-  }
   return (
     <div>
       <Form
@@ -41,47 +31,15 @@ export default () => {
           status: "draft",
         }}
       >
-        <Form.Item name="title" label="标题" rules={[{
+        <Form.Item name="motoo" label="格言" rules={[{
           required: true,
-          message: "标题不可为空！"
+          message: "格言不可为空！"
         }]}>
           <Input />
         </Form.Item>
 
-        <Form.Item name="abstract" label="摘要" rules={[{
-          required: true,
-          message: "摘要不可为空！"
-        }]}>
-          <Input.TextArea />
-        </Form.Item>
-
-        <Form.Item name="post" label="图片" rules={[{
-          required: true,
-          message: "图片链接不可为空"
-        }]}>
-          <Input />
-        </Form.Item>
-
-        <Form.Item name="category" label="类别">
-          <Radio.Group>
-            <Radio value="develop">开发类</Radio>
-            <Radio value="product">产品类</Radio>
-          </Radio.Group>
-        </Form.Item>
-
-        <Form.Item name="tags" label="标签组" rules={[{ validator: checkTags, required: true }]}>
-          <EditableTagGroup />
-        </Form.Item>
-
-        <Form.Item name="content" label="内容" rules={[{ validator: checkContent, required: true }]}>
+        <Form.Item name="content" label="自我介绍">
           <Markdown />
-        </Form.Item>
-
-        <Form.Item name="status" label="状态">
-          <Radio.Group>
-            <Radio value="draft">草稿</Radio>
-            <Radio value="post">正常</Radio>
-          </Radio.Group>
         </Form.Item>
 
         <Form.Item {...tailLayout}>

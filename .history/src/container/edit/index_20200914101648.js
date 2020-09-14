@@ -24,8 +24,8 @@ export default () => {
     }
   }
   const checkContent = (rule, value) => {
-    if (value.trim().length === 0) {
-      return Promise.reject("文章内容不能为空！");
+    if (value.length === 0) {
+      return Promise.reject('至少包含一个标签！');
     }
   }
   return (
@@ -69,11 +69,11 @@ export default () => {
           </Radio.Group>
         </Form.Item>
 
-        <Form.Item name="tags" label="标签组" rules={[{ validator: checkTags, required: true }]}>
+        <Form.Item name="tags" label="标签组" rules={[{ validator: checkTags }]}>
           <EditableTagGroup />
         </Form.Item>
 
-        <Form.Item name="content" label="内容" rules={[{ validator: checkContent, required: true }]}>
+        <Form.Item name="content" label="内容" rules={[{ validator: checkContent }]}>
           <Markdown />
         </Form.Item>
 
