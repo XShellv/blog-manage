@@ -1,57 +1,65 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Radio, Tag, Tooltip, List, Table, Space } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
+import { Form, Input, Radio, Tag, Tooltip, List, Table, Button } from "antd";
+import { DeleteOutlined, EditOutlined, HighlightOutlined, HighlightFilled } from "@ant-design/icons";
 import { service } from "../../service";
 import { useQuery } from "../../hooks/useQuery";
 
-debugger;
 export default () => {
   const { query, getQuery, jumpTo } = useQuery();
   const [list, setList] = useState([]);
+  const [loading, setLoading] = useState(false)
   const pageNo = getQuery("pageNo") * 1 || 1;
   const pageSize = getQuery("pageSize") || 10;
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     fetchList();
-  });
+  }, [pageNo, pageSize]);
+
 
   const fetchList = async () => {
-    debugger
+    setLoading(true)
     const ret = await service.fetchList({ pageSize, pageNo });
-    debugger;
+    if (ret.success) {
+      setLoading(false)
+      setList(ret.data.rows)
+      setCount(ret.data.count)
+    }
   };
 
   const columns = [
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
-      render: (text) => <a>{text}</a>,
+      title: "标题",
+      dataIndex: "title",
+      key: "title",
+      render: (title, row) => {
+        return <Link to={`/article/${row.id}`}>{title}</Link>
+      }
     },
     {
-      title: "Age",
-      dataIndex: "age",
-      key: "age",
+      title: "类别",
+      dataIndex: "category",
+      key: "category",
+      render: (text) => {
+        if (text === "develop") {
+          return "开发类"
+        } else if (text === "product") {
+          return "产品类"
+        }
+      }
     },
     {
-      title: "Address",
-      dataIndex: "address",
-      key: "address",
-    },
-    {
-      title: "Tags",
-      key: "tags",
+      title: "标签组",
       dataIndex: "tags",
+      key: "tags",
       render: (tags) => (
         <>
-          {tags.map((tag) => {
-            let color = tag.length > 5 ? "geekblue" : "green";
-            if (tag === "loser") {
-              color = "volcano";
-            }
+          {tags.map((tag, i) => {
+            let color = tag.name.length > 5 ? "geekblue" : "green";
             return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
+              <Tag color={color} key={i}>
+                {tag.name}
               </Tag>
             );
           })}
@@ -59,62 +67,97 @@ export default () => {
       ),
     },
     {
-      title: "Action",
-      key: "action",
-      render: (text, record) => (
-        <Space size="middle">
-          <a>Invite {record.name}</a>
-          <a>Delete</a>
-        </Space>
+      title: "图片链接",
+      dataIndex: "post",
+      key: "post",
+      render: (post) => (
+        <a href={post}>{post}</a>
       ),
     },
-  ];
-
-  const data = [
     {
-      key: "1",
-      name: "John Brown",
-      age: 32,
-      address: "New York No. 1 Lake Park",
-      tags: ["nice", "developer"],
+      title: "点赞数",
+      dataIndex: "like",
+      key: "like"
     },
     {
-      key: "2",
-      name: "Jim Green",
-      age: 42,
-      address: "London No. 1 Lake Park",
-      tags: ["loser"],
+      title: "阅读数",
+      dataIndex: "read",
+      key: "read"
     },
     {
-      key: "3",
-      name: "Joe Black",
-      age: 32,
-      address: "Sidney No. 1 Lake Park",
-      tags: ["cool", "teacher"],
+      title: "操作",
+      key: "op",
+      render: (text, row) => (
+        <Button.Group>
+          <Tooltip
+            title="编辑"
+          >
+            <Button
+              size="small"
+              icon={<EditOutlined />}
+              onClick={() => {
+                // this.setState({
+                //   postData: row
+                // })
+              }}
+            />
+          </Tooltip>
+          <Tooltip
+            title="删除"
+          >
+            <Button
+              size="small"
+              icon={<DeleteOutlined />}
+              onClick={() => {
+                // this.setState({
+                //   postData: row
+                // })
+              }}
+            />
+          </Tooltip>
+          <Tooltip
+            title={row.status !== "draft" ? "标记草稿" : "标记正常"}
+          >
+            <Button
+              size="small"
+              icon={row.status === "draft" ? <HighlightFilled style={{ color: "red" }} /> : <HighlightOutlined />}
+              onClick={() => {
+                // this.setState({
+                //   postData: row
+                // })
+              }}
+            />
+          </Tooltip>
+        </Button.Group>
+      ),
     },
   ];
 
   return (
     <Table
       columns={columns}
-      dataSource={data}
+      dataSource={list.map(item => { item.key = item.title; return item })}
+      expandable={{
+        expandedRowRender: record => <p style={{ margin: 0 }}>{record.abstract}</p>,
+      }}
+      loading={loading}
       pagination={{
-        total: list.count,
+        total: count,
         showTotal: (total) => `共 ${total} 篇`,
         pageSize: pageSize,
         current: pageNo,
-        hideOnSinglePage: true,
+        // hideOnSinglePage: true,
         size: "small",
-        // onChange: (pageNo, pageSize) => {
-        //   query.set("pageNo", pageNo + "");
-        //   query.set("pageSize", pageSize + "");
-        //   jumpTo(query);
-        // },
-        // onShowSizeChange: (pageNo, pageSize) => {
-        //   query.set("pageNo", pageNo + "");
-        //   query.set("pageSize", pageSize + "");
-        //   jumpTo(query);
-        // },
+        onChange: (pageNo, pageSize) => {
+          query.set("pageNo", pageNo + "");
+          query.set("pageSize", pageSize + "");
+          jumpTo(query);
+        },
+        onShowSizeChange: (pageNo, pageSize) => {
+          query.set("pageNo", pageNo + "");
+          query.set("pageSize", pageSize + "");
+          jumpTo(query);
+        },
         showQuickJumper: true,
         showSizeChanger: true,
         pageSizeOptions: ["10", "20", "50"],
