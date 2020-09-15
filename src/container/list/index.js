@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Form, Input, Radio, Tag, Tooltip, List, Table, Button } from "antd";
 import { DeleteOutlined, EditOutlined, HighlightOutlined, HighlightFilled } from "@ant-design/icons";
 import { service } from "../../service";
 import { useQuery } from "../../hooks/useQuery";
 
 export default () => {
+  const history = useHistory();
   const { query, getQuery, jumpTo } = useQuery();
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false)
@@ -58,7 +59,7 @@ export default () => {
           {tags.map((tag, i) => {
             let color = tag.name.length > 5 ? "geekblue" : "green";
             return (
-              <Tag color={color} key={i}>
+              <Tag color={color} key={tag.name}>
                 {tag.name}
               </Tag>
             );
@@ -96,6 +97,17 @@ export default () => {
               size="small"
               icon={<EditOutlined />}
               onClick={() => {
+                history.push(`/edit/${row.id}`)
+              }}
+            />
+          </Tooltip>
+          <Tooltip
+            title={row.status !== "draft" ? "标记草稿" : "标记正常"}
+          >
+            <Button
+              size="small"
+              icon={row.status === "draft" ? <HighlightFilled style={{ color: "red" }} /> : <HighlightOutlined />}
+              onClick={() => {
                 // this.setState({
                 //   postData: row
                 // })
@@ -108,19 +120,6 @@ export default () => {
             <Button
               size="small"
               icon={<DeleteOutlined />}
-              onClick={() => {
-                // this.setState({
-                //   postData: row
-                // })
-              }}
-            />
-          </Tooltip>
-          <Tooltip
-            title={row.status !== "draft" ? "标记草稿" : "标记正常"}
-          >
-            <Button
-              size="small"
-              icon={row.status === "draft" ? <HighlightFilled style={{ color: "red" }} /> : <HighlightOutlined />}
               onClick={() => {
                 // this.setState({
                 //   postData: row

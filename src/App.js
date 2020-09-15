@@ -12,6 +12,7 @@ function App() {
       <Layout>
         <Route path="/" exact component={Edit}></Route>
         <Route path="/edit" exact component={Edit}></Route>
+        <Route path="/edit/:id" component={Edit}></Route>
         <Route path="/about" component={About}></Route>
         <Route path="/list" component={List}></Route>
         <Route path="/result" component={Result}></Route>

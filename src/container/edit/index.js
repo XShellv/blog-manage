@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Input, Radio, Tag, Tooltip, Button } from "antd";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons";
 import { service } from "../../service";
 import Markdown from "../../components/markdown";
@@ -14,18 +14,41 @@ const tailLayout = {
 };
 
 export default () => {
+  const params = useParams()
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const [pageLoading, setPageLoading] = useState(false);
   const history = useHistory();
 
+
+  useEffect(() => {
+    const { id } = params;
+    fetchPost({ id })
+  }, [])
+
   const onFinish = async (values) => {
+    const { id } = params;
     setLoading(true);
-    const ret = await service.fetchPost(values);
+    const ret = await service.publishPost({ ...values, id });
     if (ret) {
       setLoading(false);
       history.push("/result");
     }
   };
+
+  const fetchPost = async (params) => {
+    setPageLoading(true);
+    const ret = await service.fetchPost(params);
+    if (ret.success) {
+      setPageLoading(false);
+      const data = ret.data;
+      form.setFieldsValue({
+        ...data,
+        tags: data.tags.map(tag => tag.name)
+      })
+    }
+  };
+
   const checkTags = (rule, value) => {
     if (value.length === 0) {
       return Promise.reject("至少包含一个标签！");
@@ -134,7 +157,6 @@ export default () => {
 
 class EditableTagGroup extends React.Component {
   state = {
-    tags: this.props.value,
     inputVisible: false,
     inputValue: "",
     editInputIndex: -1,
@@ -142,15 +164,14 @@ class EditableTagGroup extends React.Component {
   };
 
   handleClose = (removedTag) => {
-    const tags = this.state.tags.filter((tag) => tag !== removedTag);
-    this.triggerChange(tags);
-    this.setState({ tags });
+    const { value: tags } = this.props;
+    this.triggerChange(tags.filter((tag) => tag !== removedTag));
   };
 
   triggerChange = (changedValue) => {
-    const { onChange, value } = this.props;
+    const { onChange } = this.props;
     if (onChange) {
-      onChange([...value, ...changedValue]);
+      onChange([...changedValue]);
     }
   };
 
@@ -163,14 +184,16 @@ class EditableTagGroup extends React.Component {
   };
 
   handleInputConfirm = () => {
+    debugger
     const { inputValue } = this.state;
-    let { tags } = this.state;
+    let { value: tags } = this.props;
+    let temp = tags;
     if (inputValue && tags.indexOf(inputValue) === -1) {
-      tags = [...tags, inputValue];
+      temp = [...temp, inputValue];
     }
-    this.triggerChange(tags);
+    this.triggerChange(temp);
     this.setState({
-      tags,
+      // tags,
       inputVisible: false,
       inputValue: "",
     });
@@ -203,13 +226,12 @@ class EditableTagGroup extends React.Component {
 
   render() {
     const {
-      tags,
       inputVisible,
       inputValue,
       editInputIndex,
       editInputValue,
     } = this.state;
-    console.log(this.props);
+    const { value: tags } = this.props;
     return (
       <>
         {tags.map((tag, index) => {
@@ -259,8 +281,8 @@ class EditableTagGroup extends React.Component {
               {tagElem}
             </Tooltip>
           ) : (
-            tagElem
-          );
+              tagElem
+            );
         })}
         {inputVisible && (
           <Input

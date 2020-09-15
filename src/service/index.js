@@ -4,11 +4,16 @@ class Service {
     const { pageSize, pageNo } = params;
     return request(`/api/post?pageSize=${pageSize}&pageNo=${pageNo}`);
   }
-  fetchPost(body) {
-    return request(`/api/post`, {
+  publishPost(body) {
+    const { id } = body;
+    let url = id !== undefined ? `/api/post/${id}` : `/api/post`
+    return request(url, {
       method: "POST",
       body,
     });
+  }
+  fetchPost(params) {
+    return request(`/api/post/${params.id}`);
   }
 }
 
