@@ -1,59 +1,86 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { Form, Input, Radio, Tag, Tooltip, Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import Markdown from "../../components/markdown";
-
+import { service } from "../../service";
 
 const layout = {
-    labelCol: { span: 4 },
-    wrapperCol: { span: 16 },
+  labelCol: { span: 4 },
+  wrapperCol: { span: 16 },
 };
 const tailLayout = {
-    wrapperCol: { offset: 4, span: 16 },
+  wrapperCol: { offset: 4, span: 16 },
 };
 
 export default () => {
-    const [form] = Form.useForm();
+  const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
+  const history = useHistory();
+  useEffect(() => {
+    fetchAbout();
+  }, []);
 
-    const checkContent = (rule, value) => {
-        if (value.trim().length === 0) {
-            return Promise.reject("自我介绍不能为空！");
-        }
+  const fetchAbout = async () => {
+    const ret = await service.fetchAbout();
+    if (ret.success) {
+      form.setFieldsValue({
+        ...ret.data,
+      });
     }
-
-    const onFinish = (values) => {
-        debugger
+  };
+  const checkContent = (rule, value) => {
+    if (value.trim().length === 0) {
+      return Promise.reject("自我介绍不能为空！");
     }
-    return (
-        <div>
-            <Form
-                {...layout}
-                form={form}
-                onFinish={onFinish}
-                initialValues={{
-                    category: "develop",
-                    tags: [],
-                    content: "",
-                    status: "draft",
-                }}
-            >
-                <Form.Item name="motoo" label="格言" rules={[{
-                    required: true,
-                    message: "格言不可为空！"
-                }]}>
-                    <Input />
-                </Form.Item>
+    return Promise.resolve();
+  };
 
-                <Form.Item name="content" label="自我介绍" rules={[{ validator: checkContent, required: true }]}>
-                    <Markdown />
-                </Form.Item>
+  const onFinish = async (values) => {
+    setLoading(true);
+    const ret = await service.updateAbout(values);
+    if (ret) {
+      setLoading(false);
+      history.push({
+        pathname: "/about/result"
+      });
+    }
+  };
+  return (
+    <div>
+      <Form
+        {...layout}
+        form={form}
+        onFinish={onFinish}
+        initialValues={{ content: "" }}
+      >
+        <Form.Item
+          name="motto"
+          label="格言"
+          rules={[
+            {
+              required: true,
+              message: "格言不可为空！",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
 
-                <Form.Item {...tailLayout}>
-                    <Button type="primary" htmlType="submit" >
-                        提交
+        <Form.Item
+          name="content"
+          label="自我介绍"
+          rules={[{ validator: checkContent, required: true }]}
+        >
+          <Markdown />
+        </Form.Item>
+
+        <Form.Item {...tailLayout}>
+          <Button type="primary" htmlType="submit" loading={loading}>
+            提交
           </Button>
-                </Form.Item>
-            </Form>
-        </div>
-    );
+        </Form.Item>
+      </Form>
+    </div>
+  );
 };

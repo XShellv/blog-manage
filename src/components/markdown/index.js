@@ -2,6 +2,7 @@ import React from "react";
 import Vditor from "vditor";
 import "./index.scss";
 
+
 class Markdown extends React.Component {
   triggerChange = (changedValue) => {
     const { onChange } = this.props;
@@ -10,7 +11,7 @@ class Markdown extends React.Component {
     }
   };
   componentDidMount() {
-    const vditor = new Vditor("vditor", {
+    this.vditor = new Vditor("vditor", {
       height: 360,
       tab: '      ',
       mode: 'sv',
@@ -24,12 +25,14 @@ class Markdown extends React.Component {
         this.triggerChange(value);
       },
       after: () => {
-        vditor.setValue(this.props.value);
+        this.vditor.setValue('Hello, Vditor + React!')
+        // this.vditor.setValue(this.props.value);
       },
     });
   }
 
   render() {
+    console.log(this.props)
     return <div id="vditor"></div>;
   }
 }

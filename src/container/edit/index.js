@@ -14,17 +14,16 @@ const tailLayout = {
 };
 
 export default () => {
-  const params = useParams()
+  const params = useParams();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(false);
   const history = useHistory();
 
-
   useEffect(() => {
     const { id } = params;
-    fetchPost({ id })
-  }, [])
+    fetchPost({ id });
+  }, []);
 
   const onFinish = async (values) => {
     const { id } = params;
@@ -32,7 +31,7 @@ export default () => {
     const ret = await service.publishPost({ ...values, id });
     if (ret) {
       setLoading(false);
-      history.push("/result");
+      history.push("/post/result");
     }
   };
 
@@ -44,8 +43,8 @@ export default () => {
       const data = ret.data;
       form.setFieldsValue({
         ...data,
-        tags: data.tags.map(tag => tag.name)
-      })
+        tags: data.tags.map((tag) => tag.name),
+      });
     }
   };
 
@@ -184,7 +183,7 @@ class EditableTagGroup extends React.Component {
   };
 
   handleInputConfirm = () => {
-    debugger
+    debugger;
     const { inputValue } = this.state;
     let { value: tags } = this.props;
     let temp = tags;
@@ -281,8 +280,8 @@ class EditableTagGroup extends React.Component {
               {tagElem}
             </Tooltip>
           ) : (
-              tagElem
-            );
+            tagElem
+          );
         })}
         {inputVisible && (
           <Input
