@@ -16,6 +16,7 @@ const tailLayout = {
 export default () => {
   const params = useParams();
   const [form] = Form.useForm();
+  const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(false);
   const history = useHistory();
@@ -28,7 +29,7 @@ export default () => {
   const onFinish = async (values) => {
     const { id } = params;
     setLoading(true);
-    const ret = await service.publishPost({ ...values, id });
+    const ret = await service.publishPost({ ...values, id, content });
     if (ret) {
       setLoading(false);
       history.push("/post/result");
@@ -41,6 +42,7 @@ export default () => {
     if (ret.success) {
       setPageLoading(false);
       const data = ret.data;
+      setContent(data.content);
       form.setFieldsValue({
         ...data,
         tags: data.tags.map((tag) => tag.name),
@@ -62,6 +64,11 @@ export default () => {
       return Promise.resolve();
     }
   };
+
+  const setContentAndValidate = (value) => {
+    setContent(value);
+  };
+
   return (
     <div>
       <Form
@@ -132,9 +139,9 @@ export default () => {
         <Form.Item
           name="content"
           label="内容"
-          rules={[{ validator: checkContent, required: true }]}
+          // rules={[{ validator: checkContent, required: true }]}
         >
-          <Markdown />
+          <Markdown value={content} setContent={setContentAndValidate} />
         </Form.Item>
 
         <Form.Item name="status" label="状态">

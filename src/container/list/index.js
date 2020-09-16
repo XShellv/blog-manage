@@ -10,6 +10,7 @@ import {
   Table,
   Button,
   Popconfirm,
+  message,
 } from "antd";
 import {
   DeleteOutlined,
@@ -46,12 +47,14 @@ export default () => {
   const deletePost = async (id) => {
     const ret = await service.deletePost({ id });
     if (ret) {
+      message.success("删除成功！");
       fetchList();
     }
   };
   const maskPost = async (values) => {
     const ret = await service.publishPost(values);
     if (ret) {
+      message.success("设置成功!");
       fetchList();
     }
   };
