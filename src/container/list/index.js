@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import {
   Form,
-  Input,
+  Tabs,
   Radio,
   Tag,
   Tooltip,
@@ -20,11 +20,13 @@ import {
 } from "@ant-design/icons";
 import { service } from "../../service";
 import { useQuery } from "../../hooks/useQuery";
+const { TabPane } = Tabs;
 
 export default () => {
   const history = useHistory();
   const { query, getQuery, jumpTo } = useQuery();
   const [list, setList] = useState([]);
+  const [key, setKey] = useState("post");
   const [loading, setLoading] = useState(false);
   const pageNo = getQuery("pageNo") * 1 || 1;
   const pageSize = getQuery("pageSize") || 10;
@@ -32,11 +34,16 @@ export default () => {
 
   useEffect(() => {
     fetchList();
-  }, [pageNo, pageSize]);
+  }, [pageNo, pageSize, key]);
 
   const fetchList = async () => {
     setLoading(true);
-    const ret = await service.fetchList({ pageSize, pageNo });
+    let ret;
+    if (key === "post") {
+      ret = await service.fetchPosts({ pageSize, pageNo });
+    } else {
+      ret = await service.fetchDrafts({ pageSize, pageNo });
+    }
     if (ret.success) {
       setLoading(false);
       setList(ret.data.rows);
@@ -134,8 +141,8 @@ export default () => {
                 row.status === "draft" ? (
                   <HighlightFilled style={{ color: "red" }} />
                 ) : (
-                  <HighlightOutlined />
-                )
+                    <HighlightOutlined />
+                  )
               }
               onClick={() =>
                 maskPost({
@@ -160,7 +167,7 @@ export default () => {
     },
   ];
 
-  return (
+  const TableCom = (
     <Table
       columns={columns}
       dataSource={list.map((item) => {
@@ -196,5 +203,16 @@ export default () => {
       }}
       size="small"
     />
+  )
+
+  return (
+    <Tabs activeKey={key} onChange={(key) => setKey(key)} type="card">
+      <TabPane tab="文章" key="post">
+        {TableCom}
+      </TabPane>
+      <TabPane tab="草稿" key="draft">
+        {TableCom}
+      </TabPane>
+    </Tabs>
   );
 };

@@ -1,8 +1,13 @@
 import { request } from "../utils/util";
 class Service {
-  fetchList(params) {
+  fetchPosts(params) {
     const { pageSize, pageNo } = params;
     return request(`/api/post?pageSize=${pageSize}&pageNo=${pageNo}`);
+  }
+
+  fetchDrafts(params) {
+    const { pageSize, pageNo } = params;
+    return request(`/api/draft?pageSize=${pageSize}&pageNo=${pageNo}`);
   }
 
   publishPost(body) {
