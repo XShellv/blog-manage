@@ -8,7 +8,7 @@ import Layout from "./layout";
 
 function App() {
   return (
-    <Router>
+    <Router basename="/manage">
       <Layout>
         <Route path="/" exact component={Edit}></Route>
         <Route path="/edit" exact component={Edit}></Route>

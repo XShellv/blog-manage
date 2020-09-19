@@ -1,6 +1,6 @@
 {
   "name": "blog-manage",
-  "homepage": "manage",
+  "homepage": "http://localhost/manage",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
