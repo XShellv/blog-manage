@@ -19,6 +19,11 @@ export default ({ children }) => {
           </Link>
         </div>
         <Menu theme="dark" mode="horizontal" selectedKeys={[location.pathname]}>
+          <Menu.Item key="//www.xshellv.com" onClick={()=>{
+              window.open("//www.xshellv.com","_blank")
+          }}>
+            我的博客
+          </Menu.Item>
           <SubMenu key="/manage" title="文章管理">
             <Menu.Item key="/list">
               <Link to="/list">文章列表</Link>

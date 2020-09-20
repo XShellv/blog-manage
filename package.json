@@ -70,7 +70,8 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "scp": "scp -r .\\manage xshellv@119.45.162.84:/nginx-1.18.0/html"
   },
   "eslintConfig": {
     "extends": "react-app"
