@@ -32,7 +32,12 @@ export default () => {
     const ret = await service.publishPost({ ...values, id, content });
     if (ret) {
       setLoading(false);
-      history.push("/post/result");
+      history.push({
+        pathname: "/post/result",
+        state: {
+          id: ret.data.id,
+        },
+      });
     }
   };
 
@@ -70,94 +75,92 @@ export default () => {
   };
 
   return (
-    <div>
-      <Form
-        {...layout}
-        form={form}
-        onFinish={onFinish}
-        initialValues={{
-          category: "develop",
-          tags: [],
-          content: "",
-          status: "draft",
-        }}
+    <Form
+      {...layout}
+      form={form}
+      onFinish={onFinish}
+      initialValues={{
+        category: "develop",
+        tags: [],
+        content: "",
+        status: "draft",
+      }}
+    >
+      <Form.Item
+        name="title"
+        label="标题"
+        rules={[
+          {
+            required: true,
+            message: "标题不可为空！",
+          },
+        ]}
       >
-        <Form.Item
-          name="title"
-          label="标题"
-          rules={[
-            {
-              required: true,
-              message: "标题不可为空！",
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
+        <Input />
+      </Form.Item>
 
-        <Form.Item
-          name="abstract"
-          label="摘要"
-          rules={[
-            {
-              required: true,
-              message: "摘要不可为空！",
-            },
-          ]}
-        >
-          <Input.TextArea />
-        </Form.Item>
+      <Form.Item
+        name="abstract"
+        label="摘要"
+        rules={[
+          {
+            required: true,
+            message: "摘要不可为空！",
+          },
+        ]}
+      >
+        <Input.TextArea />
+      </Form.Item>
 
-        <Form.Item
-          name="post"
-          label="图片"
-          rules={[
-            {
-              required: true,
-              message: "图片链接不可为空",
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
+      <Form.Item
+        name="post"
+        label="图片"
+        rules={[
+          {
+            required: true,
+            message: "图片链接不可为空",
+          },
+        ]}
+      >
+        <Input />
+      </Form.Item>
 
-        <Form.Item name="category" label="类别">
-          <Radio.Group>
-            <Radio value="develop">开发类</Radio>
-            <Radio value="product">产品类</Radio>
-          </Radio.Group>
-        </Form.Item>
+      <Form.Item name="category" label="类别">
+        <Radio.Group>
+          <Radio value="develop">开发类</Radio>
+          <Radio value="product">产品类</Radio>
+        </Radio.Group>
+      </Form.Item>
 
-        <Form.Item
-          name="tags"
-          label="标签组"
-          rules={[{ validator: checkTags, required: true }]}
-        >
-          <EditableTagGroup />
-        </Form.Item>
+      <Form.Item
+        name="tags"
+        label="标签组"
+        rules={[{ validator: checkTags, required: true }]}
+      >
+        <EditableTagGroup />
+      </Form.Item>
 
-        <Form.Item
-          name="content"
-          label="内容"
-          // rules={[{ validator: checkContent, required: true }]}
-        >
-          <Markdown value={content} setContent={setContentAndValidate} />
-        </Form.Item>
+      <Form.Item
+        name="content"
+        label="内容"
+        // rules={[{ validator: checkContent, required: true }]}
+      >
+        <Markdown value={content} setContent={setContentAndValidate} />
+      </Form.Item>
 
-        <Form.Item name="status" label="状态">
-          <Radio.Group>
-            <Radio value="draft">草稿</Radio>
-            <Radio value="post">正常</Radio>
-          </Radio.Group>
-        </Form.Item>
+      <Form.Item name="status" label="状态">
+        <Radio.Group>
+          <Radio value="draft">草稿</Radio>
+          <Radio value="post">正常</Radio>
+        </Radio.Group>
+      </Form.Item>
 
-        <Form.Item {...tailLayout}>
-          <Button type="primary" htmlType="submit" loading={loading}>
-            提交
-          </Button>
-        </Form.Item>
-      </Form>
-    </div>
+      <Form.Item {...tailLayout}>
+        <Button type="primary" htmlType="submit" loading={loading}>
+          提交
+        </Button>
+      </Form.Item>
+    </Form>
   );
 };
 

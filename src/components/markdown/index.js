@@ -26,10 +26,11 @@ const Markdown = (props) => {
         props.setContent(value);
       },
       after: () => {
+        debugger;
         vditor.setValue(props.value);
       },
     });
-    return () => vditor.destroy();
+    return () => vditor && vditor.destroy();
   }, [props.value]);
 
   return <div id="vditor"></div>;

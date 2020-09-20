@@ -5,7 +5,7 @@ const path = require("path");
 const fs = require("fs");
 const proxy = require("koa2-proxy-middleware");
 
-app.use(koaStatic(path.resolve(__dirname, "./manage/")));
+app.use(koaStatic(path.resolve(__dirname, "./")));
 
 const options = {
   targets: {

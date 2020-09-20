@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Form, Input, Radio, Tag, Tooltip, Button } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import "./index.scss";
 import Markdown from "../../components/markdown";
 import { service } from "../../service";
 
@@ -16,6 +16,7 @@ const tailLayout = {
 export default () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const [content, setContent] = useState("");
   const history = useHistory();
   useEffect(() => {
     fetchAbout();
@@ -24,6 +25,7 @@ export default () => {
   const fetchAbout = async () => {
     const ret = await service.fetchAbout();
     if (ret.success) {
+      setContent(ret.data.content);
       form.setFieldsValue({
         ...ret.data,
       });
@@ -35,6 +37,9 @@ export default () => {
     }
     return Promise.resolve();
   };
+  const setContentAndValidate = (value) => {
+    setContent(value);
+  };
 
   const onFinish = async (values) => {
     setLoading(true);
@@ -42,12 +47,11 @@ export default () => {
     if (ret) {
       setLoading(false);
       history.push({
-        pathname: "/about/result"
+        pathname: "/about/result",
       });
     }
   };
   return (
-    <div>
       <Form
         {...layout}
         form={form}
@@ -70,9 +74,9 @@ export default () => {
         <Form.Item
           name="content"
           label="自我介绍"
-          rules={[{ validator: checkContent, required: true }]}
+          //   rules={[{ validator: checkContent, required: true }]}
         >
-          <Markdown />
+          <Markdown value={content} setContent={setContentAndValidate} />
         </Form.Item>
 
         <Form.Item {...tailLayout}>
@@ -81,6 +85,5 @@ export default () => {
           </Button>
         </Form.Item>
       </Form>
-    </div>
   );
 };
