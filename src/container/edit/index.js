@@ -129,6 +129,7 @@ export default () => {
         <Radio.Group>
           <Radio value="develop">开发类</Radio>
           <Radio value="product">产品类</Radio>
+          <Radio value="notes">笔记</Radio>
         </Radio.Group>
       </Form.Item>
 

@@ -3,12 +3,12 @@ import Vditor from "vditor";
 import "./index.scss";
 
 const Markdown = (props) => {
-  const triggerChange = (changedValue) => {
-    const { onChange } = props;
-    if (onChange) {
-      onChange(changedValue);
-    }
-  };
+//   const triggerChange = (changedValue) => {
+//     const { onChange } = props;
+//     if (onChange) {
+//       onChange(changedValue);
+//     }
+//   };
 
   useEffect(() => {
     const vditor = new Vditor("vditor", {

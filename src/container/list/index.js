@@ -84,6 +84,8 @@ export default () => {
           return "开发类";
         } else if (text === "product") {
           return "产品类";
+        } else if (text === "notes") {
+          return "笔记";
         }
       },
     },
