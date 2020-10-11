@@ -84,6 +84,7 @@ export default () => {
         tags: [],
         content: "",
         status: "draft",
+        auth: 0,
       }}
     >
       <Form.Item
@@ -130,6 +131,13 @@ export default () => {
           <Radio value="develop">开发类</Radio>
           <Radio value="product">产品类</Radio>
           <Radio value="notes">笔记</Radio>
+        </Radio.Group>
+      </Form.Item>
+
+      <Form.Item name="auth" label="开放权限">
+        <Radio.Group>
+          <Radio value={0}>所有人可见</Radio>
+          <Radio value={1}>仅限管理员</Radio>
         </Radio.Group>
       </Form.Item>
 
