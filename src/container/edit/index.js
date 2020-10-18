@@ -22,8 +22,8 @@ export default () => {
   const history = useHistory();
 
   useEffect(() => {
-    const { id } = params;
-    fetchPost({ id });
+    const { id, status } = params;
+    fetchPostOrDraft({ id, status });
   }, []);
 
   const onFinish = async (values) => {
@@ -41,9 +41,14 @@ export default () => {
     }
   };
 
-  const fetchPost = async (params) => {
+  const fetchPostOrDraft = async (params) => {
     setPageLoading(true);
-    const ret = await service.fetchPost(params);
+    let ret;
+    if (params.status === "post") {
+      ret = await service.fetchPost(params);
+    } else {
+      ret = await service.fetchDraft(params);
+    }
     if (ret.success) {
       setPageLoading(false);
       const data = ret.data;

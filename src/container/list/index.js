@@ -132,7 +132,7 @@ export default () => {
               size="small"
               icon={<EditOutlined />}
               onClick={() => {
-                history.push(`/edit/${row.id}`);
+                history.push(`/edit/${row.status}/${row.id}`);
               }}
             />
           </Tooltip>
