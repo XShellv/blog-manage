@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Radio, Tag, Tooltip, Button } from "antd";
+import { Form, Input, Radio, Tag, Tooltip, Button, DatePicker } from "antd";
 import { useHistory, useParams } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons";
 import { service } from "../../service";
 import Markdown from "../../components/markdown";
-
+import moment from "moment";
 const layout = {
   labelCol: { span: 4 },
   wrapperCol: { span: 16 },
@@ -12,6 +12,8 @@ const layout = {
 const tailLayout = {
   wrapperCol: { offset: 4, span: 16 },
 };
+const dateFormat = 'YYYY/MM/DD';
+
 
 export default () => {
   const params = useParams();
@@ -90,6 +92,7 @@ export default () => {
         content: "",
         status: "draft",
         auth: 0,
+        createdAt: moment(),
       }}
     >
       <Form.Item
@@ -137,6 +140,10 @@ export default () => {
           <Radio value="product">产品类</Radio>
           <Radio value="notes">笔记</Radio>
         </Radio.Group>
+      </Form.Item>
+
+      <Form.Item name="createdAt" label="创建时间">
+        <DatePicker allowClear={false} style={{ width: 200 }} format="YYYY-MM-DD HH:mm:ss" />
       </Form.Item>
 
       <Form.Item name="auth" label="开放权限">
