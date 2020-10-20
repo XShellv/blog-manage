@@ -4,9 +4,25 @@
     min-height: 280px;
 }
 .logo {
-    width: 120px;
-    height: 31px;
-    background: rgba(255, 255, 255, 0.2);
+    width: 200px;
+    height: 32px;
+    line-height: 32px;
     margin: 16px 24px 16px 0;
     float: left;
+    a {
+        display: inline-block;
+        width: 100%;
+        line-height: 32px;
+        height: 32px;
+        text-align: center;
+        color: rgba(255, 255, 255, 1);
+        font-size: 18px;
+        text-decoration: none;
+        img {
+            width: 26px;
+            padding-right: 5px;
+            box-sizing: content-box;
+            padding-bottom: 5px;
+        }
+    }
 }

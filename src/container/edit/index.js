@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Radio, Tag, Tooltip, Button } from "antd";
+import { Form, Input, Radio, Tag, Tooltip, Button, DatePicker } from "antd";
 import { useHistory, useParams } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons";
 import { service } from "../../service";
 import Markdown from "../../components/markdown";
-
+import moment from "moment";
 const layout = {
   labelCol: { span: 4 },
   wrapperCol: { span: 16 },
@@ -12,6 +12,8 @@ const layout = {
 const tailLayout = {
   wrapperCol: { offset: 4, span: 16 },
 };
+const dateFormat = 'YYYY/MM/DD';
+
 
 export default () => {
   const params = useParams();
@@ -22,8 +24,8 @@ export default () => {
   const history = useHistory();
 
   useEffect(() => {
-    const { id } = params;
-    fetchPost({ id });
+    const { id, status } = params;
+    fetchPostOrDraft({ id, status });
   }, []);
 
   const onFinish = async (values) => {
@@ -32,13 +34,23 @@ export default () => {
     const ret = await service.publishPost({ ...values, id, content });
     if (ret) {
       setLoading(false);
-      history.push("/post/result");
+      history.push({
+        pathname: "/post/result",
+        state: {
+          id: ret.data.id,
+        },
+      });
     }
   };
 
-  const fetchPost = async (params) => {
+  const fetchPostOrDraft = async (params) => {
     setPageLoading(true);
-    const ret = await service.fetchPost(params);
+    let ret;
+    if (params.status === "post") {
+      ret = await service.fetchPost(params);
+    } else {
+      ret = await service.fetchDraft(params);
+    }
     if (ret.success) {
       setPageLoading(false);
       const data = ret.data;
@@ -70,94 +82,106 @@ export default () => {
   };
 
   return (
-    <div>
-      <Form
-        {...layout}
-        form={form}
-        onFinish={onFinish}
-        initialValues={{
-          category: "develop",
-          tags: [],
-          content: "",
-          status: "draft",
-        }}
+    <Form
+      {...layout}
+      form={form}
+      onFinish={onFinish}
+      initialValues={{
+        category: "develop",
+        tags: [],
+        content: "",
+        status: "draft",
+        auth: 0,
+        createdAt: moment(),
+      }}
+    >
+      <Form.Item
+        name="title"
+        label="标题"
+        rules={[
+          {
+            required: true,
+            message: "标题不可为空！",
+          },
+        ]}
       >
-        <Form.Item
-          name="title"
-          label="标题"
-          rules={[
-            {
-              required: true,
-              message: "标题不可为空！",
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
+        <Input />
+      </Form.Item>
 
-        <Form.Item
-          name="abstract"
-          label="摘要"
-          rules={[
-            {
-              required: true,
-              message: "摘要不可为空！",
-            },
-          ]}
-        >
-          <Input.TextArea />
-        </Form.Item>
+      <Form.Item
+        name="abstract"
+        label="摘要"
+        rules={[
+          {
+            required: true,
+            message: "摘要不可为空！",
+          },
+        ]}
+      >
+        <Input.TextArea />
+      </Form.Item>
 
-        <Form.Item
-          name="post"
-          label="图片"
-          rules={[
-            {
-              required: true,
-              message: "图片链接不可为空",
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
+      <Form.Item
+        name="post"
+        label="图片"
+        rules={[
+          {
+            required: true,
+            message: "图片链接不可为空",
+          },
+        ]}
+      >
+        <Input />
+      </Form.Item>
 
-        <Form.Item name="category" label="类别">
-          <Radio.Group>
-            <Radio value="develop">开发类</Radio>
-            <Radio value="product">产品类</Radio>
-          </Radio.Group>
-        </Form.Item>
+      <Form.Item name="category" label="类别">
+        <Radio.Group>
+          <Radio value="develop">开发类</Radio>
+          <Radio value="product">产品类</Radio>
+          <Radio value="notes">笔记</Radio>
+        </Radio.Group>
+      </Form.Item>
 
-        <Form.Item
-          name="tags"
-          label="标签组"
-          rules={[{ validator: checkTags, required: true }]}
-        >
-          <EditableTagGroup />
-        </Form.Item>
+      <Form.Item name="createdAt" label="创建时间">
+        <DatePicker allowClear={false} style={{ width: 200 }} format="YYYY-MM-DD HH:mm:ss" />
+      </Form.Item>
 
-        <Form.Item
-          name="content"
-          label="内容"
-          // rules={[{ validator: checkContent, required: true }]}
-        >
-          <Markdown value={content} setContent={setContentAndValidate} />
-        </Form.Item>
+      <Form.Item name="auth" label="开放权限">
+        <Radio.Group>
+          <Radio value={0}>所有人可见</Radio>
+          <Radio value={1}>仅限管理员</Radio>
+        </Radio.Group>
+      </Form.Item>
 
-        <Form.Item name="status" label="状态">
-          <Radio.Group>
-            <Radio value="draft">草稿</Radio>
-            <Radio value="post">正常</Radio>
-          </Radio.Group>
-        </Form.Item>
+      <Form.Item
+        name="tags"
+        label="标签组"
+        rules={[{ validator: checkTags, required: true }]}
+      >
+        <EditableTagGroup />
+      </Form.Item>
 
-        <Form.Item {...tailLayout}>
-          <Button type="primary" htmlType="submit" loading={loading}>
-            提交
-          </Button>
-        </Form.Item>
-      </Form>
-    </div>
+      <Form.Item
+        name="content"
+        label="内容"
+        // rules={[{ validator: checkContent, required: true }]}
+      >
+        <Markdown value={content} setContent={setContentAndValidate} />
+      </Form.Item>
+
+      <Form.Item name="status" label="状态">
+        <Radio.Group>
+          <Radio value="draft">草稿</Radio>
+          <Radio value="post">正常</Radio>
+        </Radio.Group>
+      </Form.Item>
+
+      <Form.Item {...tailLayout}>
+        <Button type="primary" htmlType="submit" loading={loading}>
+          提交
+        </Button>
+      </Form.Item>
+    </Form>
   );
 };
 

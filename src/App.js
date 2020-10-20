@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Redirect,
+  Switch,
+} from "react-router-dom";
 import Edit from "./container/edit";
 import About from "./container/about";
 import List from "./container/list";
@@ -8,15 +13,17 @@ import Layout from "./layout";
 
 function App() {
   return (
-    <Router>
+    <Router basename="/manage">
       <Layout>
-        <Route path="/manage" exact component={Edit}></Route>
-        <Route path="/manage/edit" exact component={Edit}></Route>
-        <Route path="/manage/edit/:id" component={Edit}></Route>
-        <Route path="/manage/about" exact component={About}></Route>
-        <Route path="/manage/list" component={List}></Route>
-        <Route path="/manage/post/result" component={Result}></Route>
-        <Route path="/manage/about/result" component={Result}></Route>
+        <Switch>
+          <Redirect path="/" to="/edit" exact></Redirect>
+          <Route path="/edit" exact component={Edit}></Route>
+          <Route path="/edit/:status/:id" component={Edit}></Route>
+          <Route path="/about" exact component={About}></Route>
+          <Route path="/list" component={List}></Route>
+          <Route path="/post/result" component={Result}></Route>
+          <Route path="/about/result" component={Result}></Route>
+        </Switch>
       </Layout>
     </Router>
   );

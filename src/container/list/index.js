@@ -84,6 +84,8 @@ export default () => {
           return "开发类";
         } else if (text === "product") {
           return "产品类";
+        } else if (text === "notes") {
+          return "笔记";
         }
       },
     },
@@ -130,7 +132,7 @@ export default () => {
               size="small"
               icon={<EditOutlined />}
               onClick={() => {
-                history.push(`/edit/${row.id}`);
+                history.push(`/edit/${row.status}/${row.id}`);
               }}
             />
           </Tooltip>

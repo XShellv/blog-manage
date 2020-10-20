@@ -1,6 +1,6 @@
 {
   "name": "blog-manage",
-  "homepage": "manage",
+  "homepage": "http://localhost/manage",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -40,6 +40,7 @@
     "jest-resolve": "24.9.0",
     "jest-watch-typeahead": "0.4.2",
     "mini-css-extract-plugin": "0.9.0",
+    "moment": "^2.29.1",
     "node-sass": "^4.14.1",
     "optimize-css-assets-webpack-plugin": "5.0.3",
     "pnp-webpack-plugin": "1.6.4",
@@ -70,7 +71,8 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "scp": "scp -r .\\manage xshellv@119.45.162.84:/nginx-1.18.0/html"
   },
   "eslintConfig": {
     "extends": "react-app"

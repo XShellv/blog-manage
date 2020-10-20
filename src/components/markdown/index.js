@@ -3,35 +3,34 @@ import Vditor from "vditor";
 import "./index.scss";
 
 const Markdown = (props) => {
-  const triggerChange = (changedValue) => {
-    const { onChange } = props;
-    if (onChange) {
-      onChange(changedValue);
-    }
-  };
+//   const triggerChange = (changedValue) => {
+//     const { onChange } = props;
+//     if (onChange) {
+//       onChange(changedValue);
+//     }
+//   };
 
   useEffect(() => {
-    if (props.value) {
-      const vditor = new Vditor("vditor", {
-        height: 360,
-        tab: "      ",
-        mode: "sv",
-        toolbarConfig: {
-          pin: true,
-        },
-        cache: {
-          enable: false,
-        },
-        input: (value, previewElement) => {
+    const vditor = new Vditor("vditor", {
+      height: 360,
+      tab: "      ",
+      mode: "sv",
+      toolbarConfig: {
+        pin: true,
+      },
+      cache: {
+        enable: false,
+      },
+      input: (value, previewElement) => {
         //   triggerChange(value);
-          props.setContent(value);
-        },
-        after: () => {
-          vditor.setValue(props.value);
-        },
-      });
-      return () => vditor.destroy();
-    }
+        props.setContent(value);
+      },
+      after: () => {
+        debugger;
+        vditor.setValue(props.value);
+      },
+    });
+    return () => vditor && vditor.destroy();
   }, [props.value]);
 
   return <div id="vditor"></div>;

@@ -23,6 +23,10 @@ class Service {
     return request(`/api/post/${params.id}`);
   }
 
+  fetchDraft(params) {
+    return request(`/api/draft/${params.id}`);
+  }
+
   fetchAbout() {
     return request(`/api/me`);
   }
