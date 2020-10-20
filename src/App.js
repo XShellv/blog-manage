@@ -10,13 +10,13 @@ function App() {
   return (
     <Router>
       <Layout>
-        <Route path="/" exact component={Edit}></Route>
-        <Route path="/edit" exact component={Edit}></Route>
-        <Route path="/edit/:id" component={Edit}></Route>
-        <Route path="/about" exact component={About}></Route>
-        <Route path="/list" component={List}></Route>
-        <Route path="/post/result" component={Result}></Route>
-        <Route path="/about/result" component={Result}></Route>
+        <Route path="/manage" exact component={Edit}></Route>
+        <Route path="/manage/edit" exact component={Edit}></Route>
+        <Route path="/manage/edit/:id" component={Edit}></Route>
+        <Route path="/manage/about" exact component={About}></Route>
+        <Route path="/manage/list" component={List}></Route>
+        <Route path="/manage/post/result" component={Result}></Route>
+        <Route path="/manage/about/result" component={Result}></Route>
       </Layout>
     </Router>
   );
