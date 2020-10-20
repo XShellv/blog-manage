@@ -12,8 +12,7 @@ const layout = {
 const tailLayout = {
   wrapperCol: { offset: 4, span: 16 },
 };
-const dateFormat = 'YYYY/MM/DD';
-
+const dateFormat = "YYYY-MM-DD HH:mm:ss";
 
 export default () => {
   const params = useParams();
@@ -31,6 +30,7 @@ export default () => {
   const onFinish = async (values) => {
     const { id } = params;
     setLoading(true);
+    values.createdAt = moment(values.createdAt).format(dateFormat);
     const ret = await service.publishPost({ ...values, id, content });
     if (ret) {
       setLoading(false);
@@ -54,6 +54,7 @@ export default () => {
     if (ret.success) {
       setPageLoading(false);
       const data = ret.data;
+      data.createdAt = moment(data.createdAt);
       setContent(data.content);
       form.setFieldsValue({
         ...data,
@@ -80,6 +81,8 @@ export default () => {
   const setContentAndValidate = (value) => {
     setContent(value);
   };
+
+  const { id } = params;
 
   return (
     <Form
@@ -142,9 +145,19 @@ export default () => {
         </Radio.Group>
       </Form.Item>
 
-      <Form.Item name="createdAt" label="创建时间">
-        <DatePicker allowClear={false} style={{ width: 200 }} format="YYYY-MM-DD HH:mm:ss" />
-      </Form.Item>
+      {!isNaN(id * 1) && (
+        <Form.Item name="createdAt" label="创建时间">
+          <DatePicker
+            disabledDate={(current) =>
+              current && current > moment().endOf("day")
+            }
+            allowClear={false}
+            style={{ width: 200 }}
+            showTime
+            format={dateFormat}
+          />
+        </Form.Item>
+      )}
 
       <Form.Item name="auth" label="开放权限">
         <Radio.Group>
@@ -214,7 +227,6 @@ class EditableTagGroup extends React.Component {
   };
 
   handleInputConfirm = () => {
-    debugger;
     const { inputValue } = this.state;
     let { value: tags } = this.props;
     let temp = tags;
