@@ -72,7 +72,10 @@ export default () => {
       dataIndex: "title",
       key: "title",
       render: (title, row) => {
-        return <Link to={`/article/${row.id}`}>{title}</Link>;
+        return <a href="##" onClick={(e) => {
+          e.preventDefault()
+          window.open(`//${window.location.host}/article/${row.id}`, "_blank")
+        }}>{title}</a>;
       },
     },
     {
@@ -178,7 +181,7 @@ export default () => {
       })}
       expandable={{
         expandedRowRender: (record) => (
-          <p style={{ margin: 0 }}>{record.abstract}</p>
+          <p style={{ margin: 0, paddingLeft: 50 }}>{record.abstract}</p>
         ),
       }}
       loading={loading}
