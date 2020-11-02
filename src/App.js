@@ -16,11 +16,11 @@ function App() {
     <Router basename="/manage">
       <Layout>
         <Switch>
-          <Redirect path="/" to="/edit" exact></Redirect>
-          <Route path="/edit" exact component={Edit}></Route>
-          <Route path="/edit/:status/:id" component={Edit}></Route>
-          <Route path="/about" exact component={About}></Route>
+          <Redirect path="/" to="/list" exact></Redirect>
           <Route path="/list" component={List}></Route>
+          <Route path="/edit/:status/:id" component={Edit}></Route>
+          <Route path="/edit" component={Edit}></Route>
+          <Route path="/about" component={About}></Route>
           <Route path="/post/result" component={Result}></Route>
           <Route path="/about/result" component={Result}></Route>
         </Switch>

@@ -14,16 +14,17 @@ const tailLayout = {
 };
 const dateFormat = "YYYY-MM-DD HH:mm:ss";
 
-export default () => {
+export default ({ match }) => {
   const params = useParams();
   const [form] = Form.useForm();
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(false);
   const history = useHistory();
-
+  console.log(match.params)
   useEffect(() => {
     const { id, status } = params;
+    debugger;
     fetchPostOrDraft({ id, status });
   }, []);
 
@@ -46,6 +47,7 @@ export default () => {
   const fetchPostOrDraft = async (params) => {
     setPageLoading(true);
     let ret;
+    debugger;
     if (params.status === "post") {
       ret = await service.fetchPost(params);
     } else {
