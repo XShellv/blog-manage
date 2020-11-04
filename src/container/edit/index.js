@@ -17,7 +17,7 @@ const dateFormat = "YYYY-MM-DD HH:mm:ss";
 export default ({ match }) => {
   const params = useParams();
   const [form] = Form.useForm();
-  const [content, setContent] = useState("");
+  // const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(false);
   const history = useHistory();
@@ -32,7 +32,7 @@ export default ({ match }) => {
     const { id } = params;
     setLoading(true);
     values.createdAt = moment(values.createdAt).format(dateFormat);
-    const ret = await service.publishPost({ ...values, id, content });
+    const ret = await service.publishPost({ ...values, id });
     if (ret) {
       setLoading(false);
       history.push({
@@ -57,7 +57,7 @@ export default ({ match }) => {
       setPageLoading(false);
       const data = ret.data;
       data.createdAt = moment(data.createdAt);
-      setContent(data.content);
+      // setContent(data.content);
       form.setFieldsValue({
         ...data,
         tags: data.tags.map((tag) => tag.name),
@@ -78,10 +78,6 @@ export default ({ match }) => {
     } else {
       return Promise.resolve();
     }
-  };
-
-  const setContentAndValidate = (value) => {
-    setContent(value);
   };
 
   const { id } = params;
@@ -186,9 +182,9 @@ export default ({ match }) => {
       <Form.Item
         name="content"
         label="内容"
-      // rules={[{ validator: checkContent, required: true }]}
+      rules={[{ validator: checkContent, required: true }]}
       >
-        <Markdown value={content} setContent={setContentAndValidate} />
+        <Markdown />
       </Form.Item>
 
       <Form.Item {...tailLayout}>
