@@ -110,7 +110,7 @@ export default ({ match }) => {
           },
         ]}
       >
-        <Input />
+        <Input autoComplete="off" />
       </Form.Item>
 
       <Form.Item
@@ -123,7 +123,7 @@ export default ({ match }) => {
           },
         ]}
       >
-        <Input.TextArea />
+        <Input.TextArea autoComplete="off" />
       </Form.Item>
 
       <Form.Item
@@ -136,7 +136,7 @@ export default ({ match }) => {
           },
         ]}
       >
-        <Input />
+        <Input autoComplete="off" />
       </Form.Item>
 
       <Form.Item name="category" label="类别">
@@ -176,19 +176,19 @@ export default ({ match }) => {
         <EditableTagGroup />
       </Form.Item>
 
-      <Form.Item
-        name="content"
-        label="内容"
-        // rules={[{ validator: checkContent, required: true }]}
-      >
-        <Markdown value={content} setContent={setContentAndValidate} />
-      </Form.Item>
-
       <Form.Item name="status" label="状态">
         <Radio.Group>
           <Radio value="draft">草稿</Radio>
           <Radio value="post">正常</Radio>
         </Radio.Group>
+      </Form.Item>
+
+      <Form.Item
+        name="content"
+        label="内容"
+      // rules={[{ validator: checkContent, required: true }]}
+      >
+        <Markdown value={content} setContent={setContentAndValidate} />
       </Form.Item>
 
       <Form.Item {...tailLayout}>
@@ -325,8 +325,8 @@ class EditableTagGroup extends React.Component {
               {tagElem}
             </Tooltip>
           ) : (
-            tagElem
-          );
+              tagElem
+            );
         })}
         {inputVisible && (
           <Input

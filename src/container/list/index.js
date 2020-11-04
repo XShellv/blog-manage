@@ -3,7 +3,7 @@ import { Link, useHistory } from "react-router-dom";
 import {
   Form,
   Tabs,
-  Radio,
+  Popover,
   Tag,
   Tooltip,
   List,
@@ -113,7 +113,11 @@ export default () => {
       title: "图片链接",
       dataIndex: "post",
       key: "post",
-      render: (post) => <a href={post}>{post}</a>,
+      render: (post) => (
+        <Popover content={<img src={post} alt="图片背景" style={{ width: 200 }} />} title={null} trigger="hover" placement="right" >
+          <a href={post}> {post}</a>
+        </Popover>
+      )
     },
     {
       title: "点赞数",
