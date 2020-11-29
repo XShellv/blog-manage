@@ -1,5 +1,19 @@
 import { request } from "../utils/util";
 class Service {
+  login(body) {
+    let url = `/api/login`;
+    const { remember, ...rest } = body;
+    return request(url, {
+      method: "POST",
+      body: rest,
+    });
+  }
+
+  fetchUser() {
+    let url = "/api/admin/info";
+    return request(url);
+  }
+
   fetchPosts(params) {
     const { pageSize, pageNo } = params;
     return request(`/api/post?pageSize=${pageSize}&pageNo=${pageNo}`);

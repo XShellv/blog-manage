@@ -26,3 +26,21 @@
         }
     }
 }
+.log-options {
+    cursor: pointer;
+
+    .login-name {
+        display: inline-block;
+        margin: 0;
+        width: 50px;
+        line-height: 15px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        font-size: 14px;
+        color    : rgba($color: #fff, $alpha: .7);
+
+        &:hover {
+            color: rgba($color: #fff, $alpha: .9)
+        }
+    }
+}
