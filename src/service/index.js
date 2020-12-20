@@ -52,6 +52,22 @@ class Service {
     });
   }
 
+  fetchUploadToken() {
+    return request(`/api/token`, {
+      method: "POST",
+    });
+  }
+
+  fethcPics({ limit, marker }) {
+    return request(`/api/prefix-list?limit=${limit}&marker=${marker}`);
+  }
+
+  delPic({ key }) {
+    return request(`/api/qiniu-delele?key=${key}`, {
+      method: "DELETE",
+    });
+  }
+
   deletePost({ id }) {
     return request(`/api/post/${id}`, {
       method: "DELETE",

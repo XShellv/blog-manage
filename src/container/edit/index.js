@@ -1,9 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Radio, Tag, Tooltip, Button, DatePicker } from "antd";
+import {
+  Form,
+  Input,
+  Radio,
+  Tag,
+  Tooltip,
+  Button,
+  DatePicker,
+  Card,
+} from "antd";
 import { useHistory, useParams } from "react-router-dom";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import { service } from "../../service";
 import Markdown from "../../components/markdown";
+import UploadModal from "../../components/uploadModal";
 import moment from "moment";
 const layout = {
   labelCol: { span: 4 },
@@ -17,14 +27,13 @@ const dateFormat = "YYYY-MM-DD HH:mm:ss";
 export default ({ match }) => {
   const params = useParams();
   const [form] = Form.useForm();
-  // const [content, setContent] = useState("");
+  const [uploadVisible, setUploadVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(false);
   const history = useHistory();
-  console.log(match.params)
+  console.log(match.params);
   useEffect(() => {
     const { id, status } = params;
-    debugger;
     fetchPostOrDraft({ id, status });
   }, []);
 
@@ -47,7 +56,6 @@ export default ({ match }) => {
   const fetchPostOrDraft = async (params) => {
     setPageLoading(true);
     let ret;
-    debugger;
     if (params.status === "post") {
       ret = await service.fetchPost(params);
     } else {
@@ -83,116 +91,137 @@ export default ({ match }) => {
   const { id } = params;
 
   return (
-    <Form
-      {...layout}
-      form={form}
-      onFinish={onFinish}
-      initialValues={{
-        category: "develop",
-        tags: [],
-        content: "",
-        status: "draft",
-        auth: 0,
-        createdAt: moment(),
-      }}
-    >
-      <Form.Item
-        name="title"
-        label="标题"
-        rules={[
-          {
-            required: true,
-            message: "标题不可为空！",
-          },
-        ]}
-      >
-        <Input autoComplete="off" />
-      </Form.Item>
-
-      <Form.Item
-        name="abstract"
-        label="摘要"
-        rules={[
-          {
-            required: true,
-            message: "摘要不可为空！",
-          },
-        ]}
-      >
-        <Input.TextArea autoComplete="off" />
-      </Form.Item>
-
-      <Form.Item
-        name="post"
-        label="图片"
-        rules={[
-          {
-            required: true,
-            message: "图片链接不可为空",
-          },
-        ]}
-      >
-        <Input autoComplete="off" />
-      </Form.Item>
-
-      <Form.Item name="category" label="类别">
-        <Radio.Group>
-          <Radio value="develop">开发类</Radio>
-          <Radio value="product">产品类</Radio>
-          <Radio value="notes">笔记</Radio>
-        </Radio.Group>
-      </Form.Item>
-
-      {!isNaN(id * 1) && (
-        <Form.Item name="createdAt" label="创建时间">
-          <DatePicker
-            disabledDate={(current) =>
-              current && current > moment().endOf("day")
-            }
-            allowClear={false}
-            style={{ width: 200 }}
-            showTime
-            format={dateFormat}
-          />
-        </Form.Item>
-      )}
-
-      <Form.Item name="auth" label="开放权限">
-        <Radio.Group>
-          <Radio value={0}>所有人可见</Radio>
-          <Radio value={1}>仅限管理员</Radio>
-        </Radio.Group>
-      </Form.Item>
-
-      <Form.Item
-        name="tags"
-        label="标签组"
-        rules={[{ validator: checkTags, required: true }]}
-      >
-        <EditableTagGroup />
-      </Form.Item>
-
-      <Form.Item name="status" label="状态">
-        <Radio.Group>
-          <Radio value="draft">草稿</Radio>
-          <Radio value="post">正常</Radio>
-        </Radio.Group>
-      </Form.Item>
-
-      <Form.Item
-        name="content"
-        label="内容"
-      rules={[{ validator: checkContent, required: true }]}
-      >
-        <Markdown />
-      </Form.Item>
-
-      <Form.Item {...tailLayout}>
-        <Button type="primary" htmlType="submit" loading={loading}>
-          提交
+    <Card
+      bordered={false}
+      size="small"
+      extra={
+        <Button
+          size="small"
+          type="primary"
+          onClick={() => [setUploadVisible(true)]}
+          icon={<UploadOutlined />}
+        >
+          图片上传
         </Button>
-      </Form.Item>
-    </Form>
+      }
+    >
+      <Form
+        {...layout}
+        form={form}
+        onFinish={onFinish}
+        initialValues={{
+          category: "develop",
+          tags: [],
+          content: "",
+          status: "draft",
+          auth: 0,
+          createdAt: moment(),
+        }}
+      >
+        <Form.Item
+          name="title"
+          label="标题"
+          rules={[
+            {
+              required: true,
+              message: "标题不可为空！",
+            },
+          ]}
+        >
+          <Input autoComplete="off" />
+        </Form.Item>
+
+        <Form.Item
+          name="abstract"
+          label="摘要"
+          rules={[
+            {
+              required: true,
+              message: "摘要不可为空！",
+            },
+          ]}
+        >
+          <Input.TextArea autoComplete="off" />
+        </Form.Item>
+
+        <Form.Item
+          name="post"
+          label="图片"
+          rules={[
+            {
+              required: true,
+              message: "图片链接不可为空",
+            },
+          ]}
+        >
+          <Input autoComplete="off" />
+        </Form.Item>
+
+        <Form.Item name="category" label="类别">
+          <Radio.Group>
+            <Radio value="develop">开发类</Radio>
+            <Radio value="product">产品类</Radio>
+            <Radio value="notes">笔记</Radio>
+          </Radio.Group>
+        </Form.Item>
+
+        {!isNaN(id * 1) && (
+          <Form.Item name="createdAt" label="创建时间">
+            <DatePicker
+              disabledDate={(current) =>
+                current && current > moment().endOf("day")
+              }
+              allowClear={false}
+              style={{ width: 200 }}
+              showTime
+              format={dateFormat}
+            />
+          </Form.Item>
+        )}
+
+        <Form.Item name="auth" label="开放权限">
+          <Radio.Group>
+            <Radio value={0}>所有人可见</Radio>
+            <Radio value={1}>仅限管理员</Radio>
+          </Radio.Group>
+        </Form.Item>
+
+        <Form.Item
+          name="tags"
+          label="标签组"
+          rules={[{ validator: checkTags, required: true }]}
+        >
+          <EditableTagGroup />
+        </Form.Item>
+
+        <Form.Item name="status" label="状态">
+          <Radio.Group>
+            <Radio value="draft">草稿</Radio>
+            <Radio value="post">正常</Radio>
+          </Radio.Group>
+        </Form.Item>
+
+        <Form.Item
+          name="content"
+          label="内容"
+          rules={[{ validator: checkContent, required: true }]}
+        >
+          <Markdown />
+        </Form.Item>
+
+        <Form.Item {...tailLayout}>
+          <Button type="primary" htmlType="submit" loading={loading}>
+            提交
+          </Button>
+        </Form.Item>
+      </Form>
+      {uploadVisible && <UploadModal
+        visible={uploadVisible}
+        setVisible={() => {
+          setUploadVisible(false);
+        }}
+      />}
+    </Card>
   );
 };
 
@@ -321,8 +350,8 @@ class EditableTagGroup extends React.Component {
               {tagElem}
             </Tooltip>
           ) : (
-              tagElem
-            );
+            tagElem
+          );
         })}
         {inputVisible && (
           <Input

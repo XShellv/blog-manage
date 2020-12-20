@@ -5,7 +5,6 @@ import { withCookies, Cookies } from "react-cookie";
 
 const PrivateRoute = ({ component: Component, cookies, ...rest }) => {
   const user = cookies.get("user");
-  debugger;
 
   // const isLogin = useSelector((state) => state.isLogin) ;
   return (

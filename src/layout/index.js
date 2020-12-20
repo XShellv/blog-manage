@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Layout, Menu, Card, Breadcrumb, Space, Dropdown, Avatar } from "antd";
-import {UserOutlined} from "@ant-design/icons"
+import { UserOutlined } from "@ant-design/icons";
 import Icon from "../images/logo.png";
 import "./index.scss";
 import { useSelector, useDispatch } from "react-redux";
@@ -14,11 +14,11 @@ const { SubMenu } = Menu;
 export default ({ children }) => {
   const userInfo = useSelector((state) => state.userInfo);
   const location = useLocation();
-  const  dispatch =  useDispatch();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     (async () => {
-      console.log(233)
+      console.log(233);
       const ret = await service.fetchUser();
       dispatch(setUser(ret.data));
     })();
@@ -75,7 +75,11 @@ export default ({ children }) => {
               }
             >
               <Space>
-                <Avatar icon={<UserOutlined />} size={30} src={userInfo["avatar"]} />
+                <Avatar
+                  icon={<UserOutlined />}
+                  size={30}
+                  src={userInfo["avatar"]}
+                />
                 <p className="login-name">{userInfo["username"]}</p>
               </Space>
             </Dropdown>

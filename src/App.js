@@ -29,6 +29,7 @@ function App() {
           <PrivateRoute path="/about" component={About}></PrivateRoute>
           <PrivateRoute path="/post/result" component={Result}></PrivateRoute>
           <PrivateRoute path="/about/result" component={Result}></PrivateRoute>
+          {/* <PrivateRoute path="/upload" component={Qiniu}></PrivateRoute> */}
         </Layout>
       </Switch>
     </Router>

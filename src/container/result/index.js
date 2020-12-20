@@ -6,7 +6,6 @@ export default () => {
   const history = useHistory();
   const location = useLocation();
   const params = useParams();
-  debugger;
   let title = "",
     extra = [];
   switch (location.pathname) {
