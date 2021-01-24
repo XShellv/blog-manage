@@ -27,7 +27,7 @@ export default () => {
     setLoading(false);
     if (ret.success && ret.code === 0) {
       dispatch(setUser(ret.data));
-      history.push(location.state ? location.state.from.pathname :"/manage");
+      history.push(location.state ? location.state.from.pathname :"/");
     } else {
       notification["error"]({
         message: "错误提示",

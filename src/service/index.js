@@ -5,7 +5,7 @@ class Service {
     const { remember, ...rest } = body;
     return request(url, {
       method: "POST",
-      body: rest,
+      body: rest
     });
   }
 

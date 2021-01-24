@@ -119,16 +119,16 @@ export default () => {
         </Popover>
       )
     },
-    {
-      title: "点赞数",
-      dataIndex: "like",
-      key: "like",
-    },
-    {
-      title: "阅读数",
-      dataIndex: "read",
-      key: "read",
-    },
+    // {
+    //   title: "点赞数",
+    //   dataIndex: "like",
+    //   key: "like",
+    // },
+    // {
+    //   title: "阅读数",
+    //   dataIndex: "read",
+    //   key: "read",
+    // },
     {
       title: "操作",
       key: "op",
